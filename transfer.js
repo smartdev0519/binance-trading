@@ -46,17 +46,14 @@ const getBlanceFromAccount = async(account, client) => {
         switch(account) {
             case FUTURE:
                 result = await client.futuresAccountBalance();
-                console.log("result", result);
                 if(result.length > 0) {
                     balance = result[0].balance;
                 }
                 break;
             case SPOT:
                 result = await client.accountInfo();
-                console.log("result", result.balances[0]);
                 if(Object.keys(result).length > 0) {
                     balance = await convertBTCToUSDT(result.balances[0].free);
-                    console.log("SPOT balance", balance);
                 }
                 break;
         }
