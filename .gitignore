@@ -6,3 +6,5 @@ node_modules
 
 # Ignore my private bot
 .env
+clients1.csv
+config_transfers.csv
