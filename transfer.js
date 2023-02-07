@@ -41,7 +41,7 @@ const getBlanceFromAccount = async(account, client) => {
             console.log("result", result);
             if(Object.keys(result).length > 0) {
                 balance = convertBTCToUSDT(result.balances[0].free);
-                
+                console.log("SPOT balance", balance);
             }
             break;
     }
