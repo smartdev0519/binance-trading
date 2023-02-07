@@ -1,6 +1,22 @@
 {
+  "scripts": {
+    "csv:read": "node csv.js",
+    "inite": "node binanceInite.js",
+    "start": "node bot.js",
+    "transfer": "node transfer.js"
+  },
   "dependencies": {
-    "binance-api-node": "^0.8.10",
+    "axios": "^1.3.2",
+    "binance-api-node": "^0.12.2",
+    "bitcoin-conversion": "^0.4.0",
+    "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
+    "csv": "^6.2.6",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "moment": "^2.29.4",
+    "node-csv": "^0.1.2",
+    "process": "^0.11.10",
     "technicalindicators": "^2.0.5"
   }
 }
