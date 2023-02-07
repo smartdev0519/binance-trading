@@ -28,7 +28,7 @@ const moneyTransfer = async(client) => {
             }
 
             console.log("final Data", {type: type, asset: 'USDT', amount: transferInfo.amount});
-            client.universalTransfer({type: type, asset: 'USDT', amount: transferInfo.amount});
+            await client.universalTransfer({type: type, asset: 'USDT', amount: transferInfo.amount});
         } else {
             return;
         }
