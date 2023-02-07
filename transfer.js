@@ -71,10 +71,12 @@ const getTransferInfo = async(client) => {
 
     let infos = await getTransferInfoFromCsvFile;
     console.log("infos", infos);
-    let spotBlance = getBlanceFromAccount(SPOT, client);
+    let spotBlance = await getBlanceFromAccount(SPOT, client);
+    console.log("spotblance", spotBlance);
     // let spotBlance = 100;
 
-    let futureBlance = getBlanceFromAccount(FUTURE, client);
+    let futureBlance = await getBlanceFromAccount(FUTURE, client);
+    console.log("futureBalance", futureBlance);
     // let futureBlance = 500;
 
     let clcRes = clcTransferAmountInfo(spotBlance, futureBlance, infos);
