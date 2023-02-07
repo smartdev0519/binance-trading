@@ -20,7 +20,9 @@ const moneyTransfer = async(client) => {
         } else {
             type = TRANSFERTYPE.fromFutureToSpot;
         }
-        client.universalTransfer({type: type, asset: 'USDT', amount: transferInfo.amount});
+
+        console.log("final Data", {type: type, asset: 'USDT', amount: transferInfo.amount});
+        // client.universalTransfer({type: type, asset: 'USDT', amount: transferInfo.amount});
     } else {
         return;
     }
