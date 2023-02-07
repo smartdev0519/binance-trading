@@ -6,49 +6,65 @@ const {SPOT, FUTURE, TRANSFERTYPE } = require('./constant')
 // const {infos} = require('./mockupData');
 
 const main = async() => {
-    let clients = await initeBinanceForEachClient;
-    clients.map((client) => moneyTransfer(client));
+    try {
+        let clients = await initeBinanceForEachClient;
+        clients.map((client) => moneyTransfer(client));
+    } catch(error) {
+        console.log(error);
+    }
+    ;
 }
 
 const moneyTransfer = async(client) => {
-    let transferInfo = await getTransferInfo(client);  
-    console.log("transfreInfo", transferInfo);
-    if(transferInfo !== null) {
-        let type = "";
-        if(transferInfo.to === FUTURE) {
-            type = TRANSFERTYPE.fromSpotToFuture;
-        } else {
-            type = TRANSFERTYPE.fromFutureToSpot;
-        }
+    try {
+        let transferInfo = await getTransferInfo(client);  
+        console.log("transfreInfo", transferInfo);
+        if(transferInfo !== null) {
+            let type = "";
+            if(transferInfo.to === FUTURE) {
+                type = TRANSFERTYPE.fromSpotToFuture;
+            } else {
+                type = TRANSFERTYPE.fromFutureToSpot;
+            }
 
-        console.log("final Data", {type: type, asset: 'USDT', amount: transferInfo.amount});
-        // client.universalTransfer({type: type, asset: 'USDT', amount: transferInfo.amount});
-    } else {
-        return;
+            console.log("final Data", {type: type, asset: 'USDT', amount: transferInfo.amount});
+            // client.universalTransfer({type: type, asset: 'USDT', amount: transferInfo.amount});
+        } else {
+            return;
+        }
+    } catch(error) {
+        console.log(error);
     }
+    
 }
 
 const getBlanceFromAccount = async(account, client) => {
-    let balance = null;
-    let result;
-    switch(account) {
-        case FUTURE:
-            result = await client.futuresAccountBalance();
-            console.log("result", result);
-            if(result.length > 0) {
-                balance = result[0].balance;
-            }
-            break;
-        case SPOT:
-            result = await client.accountInfo();
-            console.log("result", result.balances[0]);
-            if(Object.keys(result).length > 0) {
-                balance = await convertBTCToUSDT(result.balances[0].free);
-                console.log("SPOT balance", balance);
-            }
-            break;
+    
+    try{
+        let balance = null;
+        let result;
+        switch(account) {
+            case FUTURE:
+                result = await client.futuresAccountBalance();
+                console.log("result", result);
+                if(result.length > 0) {
+                    balance = result[0].balance;
+                }
+                break;
+            case SPOT:
+                result = await client.accountInfo();
+                console.log("result", result.balances[0]);
+                if(Object.keys(result).length > 0) {
+                    balance = await convertBTCToUSDT(result.balances[0].free);
+                    console.log("SPOT balance", balance);
+                }
+                break;
+        }
+        return balance;
+    } catch(error) {
+        console.log(error);
     }
-    return balance;
+    
 }
 
 
@@ -72,25 +88,32 @@ const getTransferInfoFromCsvFile = new Promise((resolve) => {
 })
 
 const getTransferInfo = async(client) => {
+    try{
+        let infos = await getTransferInfoFromCsvFile;
+        console.log("infos", infos);
+        let spotBlance = await getBlanceFromAccount(SPOT, client);
+        console.log("spotblance", spotBlance);
+        // let spotBlance = 100;
 
-    let infos = await getTransferInfoFromCsvFile;
-    console.log("infos", infos);
-    let spotBlance = await getBlanceFromAccount(SPOT, client);
-    console.log("spotblance", spotBlance);
-    // let spotBlance = 100;
+        let futureBlance = await getBlanceFromAccount(FUTURE, client);
+        console.log("futureBalance", futureBlance);
+        // let futureBlance = 500;
 
-    let futureBlance = await getBlanceFromAccount(FUTURE, client);
-    console.log("futureBalance", futureBlance);
-    // let futureBlance = 500;
-
-    let clcRes = clcTransferAmountInfo(spotBlance, futureBlance, infos);
+        let clcRes = clcTransferAmountInfo(spotBlance, futureBlance, infos);
+        
+        return clcRes;
+    } catch(error) {
+        console.log(error);
+    }
     
-    return clcRes;
 }
 
 const convertBTCToUSDT = async(money) => {
-    
-    return await bitcoinToFiat(money, 'USD');
+    try{
+        return await bitcoinToFiat(money, 'USD');
+    } catch(error) {
+        console.log(error);
+    }
 }
 const clcTransferAmountInfo = (spot, future, infos) => {
     
