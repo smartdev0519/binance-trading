@@ -18,18 +18,19 @@ const main = async() => {
 const moneyTransfer = async(client) => {
     try {
         let transferInfo = await getTransferInfo(client);  
-        console.log("transfreInfo", transferInfo);
-        if(transferInfo !== null) {
+        // console.log("transfreInfo", transferInfo);
+        if(transferInfo.data !== null) {
             let type = "";
-            if(transferInfo.to === FUTURE) {
+            if(transferInfo.data.to === FUTURE) {
                 type = TRANSFERTYPE.fromSpotToFuture;
             } else {
                 type = TRANSFERTYPE.fromFutureToSpot;
             }
 
-            console.log("final Data", {type: type, asset: 'USDT', amount: transferInfo.amount});
-            await client.universalTransfer({type: type, asset: 'USDT', amount: transferInfo.amount});
+            console.log("final Data", {type: type, asset: 'USDT', amount: transferInfo.data.amount});
+            await client.client.universalTransfer({type: type, asset: 'USDT', amount: transferInfo.data.amount});
         } else {
+            console.log(transferInfo.error, transferInfo.client);
             return;
         }
     } catch(error) {
@@ -86,21 +87,35 @@ const getTransferInfoFromCsvFile = new Promise((resolve) => {
 
 const getTransferInfo = async(client) => {
     try{
+        let result = {data: null, error: null, client: client.info};
         let infos = await getTransferInfoFromCsvFile;
         console.log("infos", infos);
-        let spotBlance = await getBlanceFromAccount(SPOT, client);
-        spotBlance = spotBlance || 0
+        let spotBlance = await getBlanceFromAccount(SPOT, client.client);
+        if(spotBlance === undefined) {
+            result.error = "Failed to get balance from spot account.";
+            return result;
+        }
         console.log("spotblance", spotBlance);
-        // let spotBlance = 100;
+        spotBlance = spotBlance || 0
+        // let spotBlance = 200;
 
-        let futureBlance = await getBlanceFromAccount(FUTURE, client);
+        let futureBlance = await getBlanceFromAccount(FUTURE, client.client);
+        if(futureBlance === undefined) {
+            result.error = "Failed to get balance from future account.";
+            return result;
+        };
+
         futureBlance = futureBlance || 0
         console.log("futureBalance", futureBlance);
-        // let futureBlance = 500;
+        // let futureBlance = 200;
 
         let clcRes = clcTransferAmountInfo(spotBlance, futureBlance, infos);
-        
-        return clcRes;
+        if(clcRes === null) {
+            result.error = "Spot and Future balance are equal or zero.";
+            return result;
+        }
+        result.data = clcRes;
+        return result;
     } catch(error) {
         console.log(error);
     }
@@ -129,10 +144,12 @@ const clcTransferAmountInfo = (spot, future, infos) => {
         result.to = SPOT;
         result.from = FUTURE;
         result.amount = spotAmount - spot;
-    } else {
+    } else if(spotAmount < spot) {
         result.to = FUTURE;
         result.from = SPOT;
         result.amount = spot - spotAmount;
+    } else {
+        return null;
     }
 
     return result;

@@ -2,7 +2,6 @@ const fs = require("fs");
 const { parse } = require("csv-parse");
 const Binance = require('binance-api-node').default;
 
-
 const initeBinanceForEachClient = new Promise((resolve, reject) => {
 	let clients = [];
 	fs.createReadStream("./clients1.csv")
@@ -13,8 +12,8 @@ const initeBinanceForEachClient = new Promise((resolve, reject) => {
 			const client = Binance({
 				apiKey: apiKey,
 				apiSecret: apiSecret
-			})
-			clients.push(client);
+			});
+			clients.push({client: client, info: row});
 		})
 		.on("end", function () {
 			resolve(clients);		
