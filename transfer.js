@@ -92,10 +92,12 @@ const getTransferInfo = async(client) => {
         let infos = await getTransferInfoFromCsvFile;
         console.log("infos", infos);
         let spotBlance = await getBlanceFromAccount(SPOT, client);
+        spotBlance = spotBlance || 0
         console.log("spotblance", spotBlance);
         // let spotBlance = 100;
 
         let futureBlance = await getBlanceFromAccount(FUTURE, client);
+        futureBlance = futureBlance || 0
         console.log("futureBalance", futureBlance);
         // let futureBlance = 500;
 
