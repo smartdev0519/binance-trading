@@ -1,7 +1,15 @@
 const { initeBinanceForEachClient } = require("./binanceInite");
 
-const bot = async() => {
-    let clients = await initeBinanceForEachClient;
+const main = async() => {
+    try {
+        let clients = await initeBinanceForEachClient;
+        clients.map((client) => {
+                    
+        })
+    } catch(error) {
+        console.log(error);
+    }
+    
 }
 
-bot();
+main();

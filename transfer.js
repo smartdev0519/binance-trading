@@ -3,7 +3,6 @@ const { parse } = require("csv-parse");
 const { initeBinanceForEachClient } = require("./binanceInite");
 const { bitcoinToFiat } = require('bitcoin-conversion');
 const {SPOT, FUTURE, TRANSFERTYPE } = require('./constant')
-// const {infos} = require('./mockupData');
 
 const main = async() => {
     try {
@@ -18,7 +17,7 @@ const main = async() => {
 const moneyTransfer = async(client) => {
     try {
         let transferInfo = await getTransferInfo(client);  
-        // console.log("transfreInfo", transferInfo);
+
         if(transferInfo.data !== null) {
             let type = "";
             if(transferInfo.data.to === FUTURE) {
@@ -40,7 +39,6 @@ const moneyTransfer = async(client) => {
 }
 
 const getBlanceFromAccount = async(account, client) => {
-    
     try{
         let balance = null;
         let result;
@@ -68,6 +66,7 @@ const getBlanceFromAccount = async(account, client) => {
 
 const getTransferInfoFromCsvFile = new Promise((resolve) => {
     let infos = [];
+
     fs.createReadStream("./config_transfers.csv")
 		.pipe(parse({ delimiter: ",", from_line: 2 }))
 		.on("data", function (row) {
@@ -129,8 +128,8 @@ const convertBTCToUSDT = async(money) => {
         console.log(error);
     }
 }
+
 const clcTransferAmountInfo = (spot, future, infos) => {
-    
     let result = {};
 
     let spotPero = parseFloat(getPrecentageFromInfos(SPOT, infos));
@@ -157,6 +156,7 @@ const clcTransferAmountInfo = (spot, future, infos) => {
 
 const getPrecentageFromInfos = (account, infos) => {
     let percentage = null;
+    
     infos.map((info) => {
         if(info.account === account) 
         percentage = info.percentage;
@@ -164,5 +164,4 @@ const getPrecentageFromInfos = (account, infos) => {
     return percentage;
 }
 
-// clcTransferAmountInfo(500, 100, infos);
 main();

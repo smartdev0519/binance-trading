@@ -1,8 +1,7 @@
 {
   "scripts": {
-    "csv:read": "node csv.js",
-    "inite": "node binanceInite.js",
     "start": "node bot.js",
+    "inite": "node binanceInite.js",
     "transfer": "node transfer.js"
   },
   "dependencies": {
