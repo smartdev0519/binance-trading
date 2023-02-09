@@ -206,10 +206,10 @@ const clcTransferAmountInfo = (spot, future, infos):TransferAmountInfo => {
 
     let spotAmount = sum * spotPero / 100;
 
-    if(spotAmount > spot) {
+    if(spotAmount - spot > 0.1) {
         result = {to: SPOT, from: FUTURE, amount: spotAmount - spot}
         
-    } else if(spotAmount < spot) {
+    } else if(spot - spotAmount > 0.1) {
         result = { to: FUTURE, from: SPOT, amount: spot - spotAmount};
     } else {
         return null;
