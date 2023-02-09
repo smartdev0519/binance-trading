@@ -47,7 +47,7 @@ const moneyTransfer = async(client: ClientType, csv:CSVInfoType[]) => {
 
             let result = await handleBinanceApiRequest(REQUESTID.universalTransfer, client.client, data);
             if(result === null) console.log("Failed transfering money.");
-            else console.log("Succesfully transfering money.")
+            else console.log("Succesfully transfering money.");
         } else {
             console.log(transferInfo.error, transferInfo.client);
             return;
@@ -80,7 +80,7 @@ const handleBinanceApiRequest = async(requestId, client, data?) => {
     while(result == null) {
         try{    
             count++;
-            console.log("count", count);
+            console.log("request-"+requestId+":", count);
             if(count > 3) return; 
 
             result = await sendRequest(requestId, client, data);
