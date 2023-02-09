@@ -11,13 +11,6 @@ type TransferAmountInfo = { from :string, to: string, amount: number } | null;
 type TransferInfoType = {data: TransferAmountInfo, error: string | null, client: Object };
 type CSVInfoType = {account: string, percentage: number};
 
-/*
-    requestID
-        0001: spotAccountInfo
-        0002: futureAccountBalance
-        0003: univeralTransfer
-*/
-
 const REQUESTID = {
     spotAccountInfo: "0001",
     futureBalance: "0002",
@@ -52,7 +45,9 @@ const moneyTransfer = async(client: ClientType, csv:CSVInfoType[]) => {
             let data = {type: type, asset: 'USDT', amount: transferInfo.data.amount};
             console.log("data", data);
 
-            await handleBinanceApiRequest(REQUESTID.universalTransfer, client.client, data);
+            let result = await handleBinanceApiRequest(REQUESTID.universalTransfer, client.client, data);
+            if(result === null) console.log("Failed transfering money.");
+            else console.log("Succesfully transfering money.")
         } else {
             console.log(transferInfo.error, transferInfo.client);
             return;
