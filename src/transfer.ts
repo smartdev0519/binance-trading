@@ -5,7 +5,7 @@ import { bitcoinToFiat } from "bitcoin-conversion";
 import {SPOT, FUTURE, TRANSFERTYPE} from "./constant";
 import { ClientType } from "./types";
 import {spotAccountInfo, futureBalance} from "./mockupData"
-import { delay } from "./utils/delay";
+import { delayTwo } from "./utils/delay";
 
 type TransferAmountInfo = { from :string, to: string, amount: number } | null;
 type TransferInfoType = {data: TransferAmountInfo, error: string | null, client: Object };
@@ -82,17 +82,18 @@ const handleBinanceApiRequest = async(requestId, client, data?) => {
         try{    
             count++;
             console.log("request-"+requestId+":", count);
-            if(count > 3) return; 
+            if(count > 3) return null; 
 
             result = await sendRequest(requestId, client, data);
             
         } catch(error) {
-            if(error.code === -2015) {
+            if(error.code == -2015) {
                 console.log('error:', error.message);
-                await delay();
-            } else if(error.code === -5013) {
-                console.log(error);
-                return;
+                await delayTwo();
+                continue;
+            } else if(error.code == -5013) {
+                console.log(error.code, error.message);
+                return null;
             } else{
                 console.log(error);
             }
