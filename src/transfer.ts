@@ -82,18 +82,18 @@ const handleBinanceApiRequest = async(requestId, client, data?) => {
         try{    
             count++;
             console.log("request-"+requestId+":", count);
-            if(count > 3) return null; 
+            if(count > 3) return; 
 
             result = await sendRequest(requestId, client, data);
             
         } catch(error) {
-            if(error.code == -2015) {
+            if(error.code == 0) {
                 console.log('error:', error.message);
                 await delayTwo();
                 continue;
             } else if(error.code == -5013) {
                 console.log(error.code, error.message);
-                return null;
+                return;
             } else{
                 console.log(error);
             }
