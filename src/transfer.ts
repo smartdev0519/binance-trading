@@ -231,7 +231,6 @@ const getUsdtBalanceFromSpotAccountInfo = (accounInfo):number | null => {
         }
     });
     
-    console.log("usdt balance", result);
     return result;
 }
 
