@@ -86,7 +86,7 @@ const handleBinanceApiRequest = async(requestId, client, data?) => {
             if(count > 3) return; 
 
             result = await sendRequest(requestId, client, data);
-            
+            return result;
         } catch(error) {
             if(error.code == 0) {
                 console.log('error:', error.message);
