@@ -46,7 +46,7 @@ const moneyTransfer = async(client: ClientType, csv:CSVInfoType[]) => {
             console.log("data", data);
 
             let result = await handleBinanceApiRequest(REQUESTID.universalTransfer, client.client, data);
-            if(result === null || result === undefined) console.log("Failed transfering money.");
+            if(result === null || result === undefined) console.log("Failed transfering money.", result);
             else console.log("Succesfully transfering money.");
             
         } else {
