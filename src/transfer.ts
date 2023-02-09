@@ -50,6 +50,7 @@ const moneyTransfer = async(client: ClientType, csv:CSVInfoType[]) => {
             // else console.log("Succesfully transfering money.");
             let res1 = await sendRequest(REQUESTID.futureBalance, client.client);
             console.log("res-future", res1);
+            delayTwo();
             let res2 = await sendRequest(REQUESTID.spotAccountInfo, client.client);
             console.log("res-spot", res2); 
         } else {
