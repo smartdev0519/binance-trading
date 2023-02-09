@@ -31,29 +31,28 @@ const main = async() => {
 
 const moneyTransfer = async(client: ClientType, csv:CSVInfoType[]) => {
     try {
-        // let transferInfo = await getTransferInfo(client, csv);  
-        // if(!transferInfo || transferInfo == null) return; 
+        let transferInfo = await getTransferInfo(client, csv);  
+        if(!transferInfo || transferInfo == null) return; 
 
-        // if(transferInfo.data !== null) {
-        //     let type = "";
-        //     if(transferInfo.data.to === FUTURE) {
-        //         type = TRANSFERTYPE.fromSpotToFuture;
-        //     } else {
-        //         type = TRANSFERTYPE.fromFutureToSpot;
-        //     }
+        if(transferInfo.data !== null) {
+            let type = "";
+            if(transferInfo.data.to === FUTURE) {
+                type = TRANSFERTYPE.fromSpotToFuture;
+            } else {
+                type = TRANSFERTYPE.fromFutureToSpot;
+            }
 
-        //     let data = {type: type, asset: 'USDT', amount: transferInfo.data.amount};
-        //     console.log("data", data);
+            let data = {type: type, asset: 'USDT', amount: transferInfo.data.amount};
+            console.log("data", data);
 
-        //     let result = await handleBinanceApiRequest(REQUESTID.universalTransfer, client.client, data);
-        //     if(result === null) console.log("Failed transfering money.");
-        //     else console.log("Succesfully transfering money.");
-        // } else {
-        //     console.log(transferInfo.error, transferInfo.client);
-        //     return;
-        // }
-        let res = await sendRequest(REQUESTID.futureBalance, client.client);
-        console.log("res", res);
+            let result = await handleBinanceApiRequest(REQUESTID.universalTransfer, client.client, data);
+            if(result === null || result === undefined) console.log("Failed transfering money.");
+            else console.log("Succesfully transfering money.");
+        } else {
+            console.log(transferInfo.error, transferInfo.client);
+            return;
+        }
+        
     } catch(error) {
         console.log(error);
     }
