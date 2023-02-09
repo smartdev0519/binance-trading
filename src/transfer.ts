@@ -5,7 +5,7 @@ import { bitcoinToFiat } from "bitcoin-conversion";
 import {SPOT, FUTURE, TRANSFERTYPE} from "./constant";
 import { ClientType } from "./types";
 import {spotAccountInfo, futureBalance} from "./mockupData"
-import { delayTwo } from "./utils/delay";
+import { delayTwo, delayOne } from "./utils/delay";
 
 type TransferAmountInfo = { from :string, to: string, amount: number } | null;
 type TransferInfoType = {data: TransferAmountInfo, error: string | null, client: Object };
@@ -166,6 +166,7 @@ const getTransferInfo = async(client:ClientType, csv: CSVInfoType[]) => {
             return result;
         }
         console.log("spotBalance", spotBalance);
+        await delayOne();
 
         let futureBalance:any = await getBlanceFromAccount(FUTURE, client.client);
         // let futureBalance:any = 200;
