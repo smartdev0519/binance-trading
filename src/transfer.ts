@@ -35,19 +35,23 @@ const moneyTransfer = async(client: ClientType, csv:CSVInfoType[]) => {
         if(!transferInfo || transferInfo == null) return; 
 
         if(transferInfo.data !== null) {
-            let type = "";
-            if(transferInfo.data.to === FUTURE) {
-                type = TRANSFERTYPE.fromSpotToFuture;
-            } else {
-                type = TRANSFERTYPE.fromFutureToSpot;
-            }
+            // let type = "";
+            // if(transferInfo.data.to === FUTURE) {
+            //     type = TRANSFERTYPE.fromSpotToFuture;
+            // } else {
+            //     type = TRANSFERTYPE.fromFutureToSpot;
+            // }
 
-            let data = {type: type, asset: 'USDT', amount: transferInfo.data.amount};
-            console.log("data", data);
+            // let data = {type: type, asset: 'USDT', amount: transferInfo.data.amount};
+            // console.log("data", data);
 
-            let result = await handleBinanceApiRequest(REQUESTID.universalTransfer, client.client, data);
-            if(result === null || result === undefined) console.log("Failed transfering money.");
-            else console.log("Succesfully transfering money.");
+            // let result = await handleBinanceApiRequest(REQUESTID.universalTransfer, client.client, data);
+            // if(result === null || result === undefined) console.log("Failed transfering money.");
+            // else console.log("Succesfully transfering money.");
+            let res1 = await sendRequest(REQUESTID.futureBalance, client.client);
+            console.log("res-future", res1);
+            let res2 = await sendRequest(REQUESTID.spotAccountInfo, client.client);
+            console.log("res-spot", res2); 
         } else {
             console.log(transferInfo.error, transferInfo.client);
             return;
@@ -95,7 +99,8 @@ const handleBinanceApiRequest = async(requestId, client, data?) => {
                 console.log(error.code, error.message);
                 return;
             } else{
-                console.log(error);
+                console.log(error.message);
+                return;
             }
         }
     }
